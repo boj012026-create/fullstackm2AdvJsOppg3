@@ -1,6 +1,6 @@
 const monsterContainer = document.getElementById("monster-container");
 
-const monsterStart = 100;
+const monsterStart = 99;
 const amountMonsters = monsterStart + 10;
 
 //Todo Connect API
@@ -31,22 +31,24 @@ async function getJson(apiUrl) {
 	}
 }
 
-async function monsterFactory(monsterJson) {
-	print("monsterFactory", "monsterJson", monsterJson);
+function monsterFactory(monsterJson) {
+	//print("monsterFactory", "monsterJson", monsterJson);
 	
 	const monsterOrder = monsterJson.results.slice(monsterStart, amountMonsters);
 	
 		monsterOrder.forEach(async monster => {
 			const monsterData = await getJson(dndApi.url + monster.url)
-			//print("monsterFactory", "monsterData", monsterData);
+			print("monsterFactory", "monsterData", monsterData);
 
-			const imgPath = dndApi.url + monsterData.image;
-			//print("monsterFactory", "imgPath", imgPath);
+			const monsterTitle = document.createElement('h2');
+			monsterTitle.textContent = monster.name;
 
 			const monsterImg = document.createElement('img');
+			const imgPath = dndApi.url + monsterData.image;
+			//print("monsterFactory", "imgPath", imgPath);
 			monsterImg.src = imgPath; 
 
-			monsterContainer.append(monsterImg);
+			monsterContainer.append(monsterTitle, monsterImg);
 		});
 }
 
