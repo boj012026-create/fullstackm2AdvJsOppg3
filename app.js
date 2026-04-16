@@ -59,8 +59,50 @@ function buildMonsters() {
 
 }
 
+function buildTableTitles(monsterObjArr) {
+	const tableHead = document.createElement('tr');
+	Object.keys(monsterObjArr[0]).forEach(key => {
+		const titleRow = document.createElement('th');
+		titleRow.textContent = key;
+	});
+}
+
+function tableFactory(monsters) {
+	const tableRows = [];
+	tableRows.push(buildTableTitles(monsters));
+	return tableRows;
+}
+
+async function fetchMonsters() {
+	const monsterIndex = await getJson(dndApi.monsters());
+	//print("fetchMonsters", "monsterIndex", monsterIndex); 
+	
+	const monsterFacts = monsterIndex.results.map(async (dndApi.url + mi) => {
+		//print("fetchMonsters", "mi", mi);
+
+		const dirtyMonster = await getJson(mi.url);
+		const cleanMonster = {};
+
+		cleanMonster.name = await dirtyMonster.name;
+		cleanMonster.size = await dirtyMonster.size;
+		cleanMonster.type = await dirtyMonster.type;
+		cleanMonster.armor = await dirtyMonster.armor_class[1];
+		cleanMonster.health = await dirtyMonster.hit_points;
+
+		return cleanMonster;
+	});
+	return monsterFacts;
+}
+
+function buildMonsterTable(table) {
+	fetchMonsters()
+		.then(monsters => tableFactory(monsters))
+		.then(monsterRows => table.append(monsterRows)); 
+}
+
 function renderPage() {
-	buildMonsters();
+	//buildMonsters();
+	buildMonsterTable();
 }
 
 renderPage();
