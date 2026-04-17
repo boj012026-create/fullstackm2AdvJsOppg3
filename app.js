@@ -38,6 +38,13 @@ async function getJson(apiUrl) {
 	}
 }
 
+function clearPage() {
+monsterContainer.replaceChildren();
+monsterContainerAlpha.replaceChildren();
+monsterTableAlpha.replaceChildren();
+	
+}
+
 function monsterFactory(monsterJson) {
 	//print("monsterFactory", "monsterJson", monsterJson);
 	
@@ -153,7 +160,7 @@ function monsterWasher(dirtyMonsters) {
 		clean.name = washdroid(dirty.name);
 		clean.size = washdroid(dirty.size);
 		clean.type = washdroid(dirty.type);
-		clean.armor = washdroid(dirty.armor_class[1]);
+		clean.armor = washdroid(dirty.armor_class[0].value);
 		clean.health = washdroid(dirty.hit_points);
 		return clean;
 	});
@@ -186,8 +193,10 @@ function buildMonsterTable(table) {
 }
 
 function renderPage() {
+	clearPage();
 	//buildMonsters();
 	buildMonsterTable(monsterTableAlpha);
 }
 
+renderPage();
 renderPage();
