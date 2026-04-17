@@ -86,7 +86,7 @@ async function catchMonsters() {
 	
 	//Promise runs independent awaits concurrently
 	const wildMonsters = await Promise.all( choosenTrackers.map((mi) => {
-		print("catchMonsters", "mi", mi);
+		//print("catchMonsters", "mi", mi);
 
 		//returns one of many monsters to an array
 		return getJson(dndApi.url + mi.url);
@@ -109,6 +109,8 @@ function monsterWasher(dirtyMonsters) {
 		clean.health = washdroid(dirty.hit_points);
 		return clean;
 	});
+
+	print("monsterWasher","cleanMonsters", cleanMonsters);
 	return cleanMonsters;
 }
 /*******************************************************
