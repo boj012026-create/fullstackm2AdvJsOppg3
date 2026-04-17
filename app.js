@@ -85,12 +85,13 @@ async function catchMonsters() {
 	const choosenTrackers = monsterTrackers.results.slice(monsterStart, monsterEnd)
 	
 	const wildMonsters = await choosenTrackers.map(async (mi) => {
-		print("fetchMonsters", "mi", mi);
+		print("catchMonsters", "mi", mi);
 
-		 await getJson(dndApi.url + mi.url);
-	
+		//returns one of many monsters to an array
+		return await getJson(dndApi.url + mi.url);
 	});
-	console.log("Wild Monsters are catched and ready to return");
+
+	print("catchMonsters", "wildMonsters", wildMonsters);
 	return wildMonsters;
 }
 
