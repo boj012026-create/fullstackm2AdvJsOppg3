@@ -38,13 +38,6 @@ async function getJson(apiUrl) {
 	}
 }
 
-function clearPage() {
-monsterContainer.replaceChildren();
-monsterContainerAlpha.replaceChildren();
-monsterTableAlpha.replaceChildren();
-	
-}
-
 function monsterFactory(monsterJson) {
 	//print("monsterFactory", "monsterJson", monsterJson);
 	
@@ -189,11 +182,10 @@ function buildMonsterTable(table) {
 	catchMonsters()
 		.then(wildMonsters => monsterWasher(wildMonsters))
 		.then(cleanMonsters => tableFactory(cleanMonsters))
-		.then(monsterRows => table.append(...monsterRows)); 
+		.then(monsterRows => table.replaceChildren(...monsterRows)); 
 }
 
 function renderPage() {
-	clearPage();
 	//buildMonsters();
 	buildMonsterTable(monsterTableAlpha);
 }
