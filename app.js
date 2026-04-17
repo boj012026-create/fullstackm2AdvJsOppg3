@@ -94,6 +94,8 @@ async function catchMonsters() {
 }
 
 function monsterWasher(dirtyMonsters) {
+	print("monsterWasher", "dirtyMonsters", dirtyMonsters);
+
 	const cleanMonster = {};
 
 	cleanMonster.name = dirtyMonsters.name;
