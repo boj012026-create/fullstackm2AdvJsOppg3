@@ -68,7 +68,7 @@ function buildTableTitles(monsterObjArr) {
 	//print("buildTableTitles", "monsterObjArr", monsterObjArr);
 	const tableHeader = document.createElement('tr');
 	
-	const monsterKeys = Object.keys(monsterObjArr);
+	const monsterKeys = Object.keys(monsterObjArr[0]);
 	print("buildTableTitles", "monsterKeys", monsterKeys);
 
 	monsterKeys.forEach(key => {
