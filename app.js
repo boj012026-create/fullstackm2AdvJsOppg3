@@ -77,7 +77,7 @@ async function fetchMonsters() {
 	const monsterIndex = await getJson(dndApi.monsters());
 	//print("fetchMonsters", "monsterIndex", monsterIndex); 
 	
-	const monsterFacts = monsterIndex.results.map(async (mi) => {
+	const monsterFacts = await monsterIndex.results.map(async (mi) => {
 		//print("fetchMonsters", "mi", mi);
 
 		const dirtyMonster = await getJson(dndApi.url + mi.url);
