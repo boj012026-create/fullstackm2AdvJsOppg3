@@ -65,9 +65,9 @@ function buildMonsters() {
 		.then(monsters => monsterContainer.append(monsters));
 
 }
+
 /**************************************************************
- * returns table header with objArr's key  titles
- * 
+ * returns one table header with objArr's key  titles
  * ************************************************************/
 function buildTableTitles(monsterObjArr) {
 	//print("buildTableTitles", "monsterObjArr", monsterObjArr);
@@ -86,14 +86,15 @@ function buildTableTitles(monsterObjArr) {
 	return tableHeader
 }
 
+/************************************************************
+ * builds table rows from given monster Object array
+ * returns an array of tableRows
+ * ***********************************************************/
 function buildTableRows(monsterObjArr) {
 	return monsterObjArr.map(m => {
 		const dataRow = document.createElement('tr');
 		//print("buildTableRows", "m", m) 
 		
-		const monsterKeys = Object.keys(m);
-		//print("buildTableRows", "monsterKeys", monsterKeys) 
-
 		Object.keys(m).forEach(key => {
 			const data = document.createElement('td');
 
@@ -102,7 +103,7 @@ function buildTableRows(monsterObjArr) {
 			dataRow.append(data);
 		});
 
-		print("buildTablerows", "dataRow", dataRow);
+		//print("buildTablerows", "dataRow", dataRow);
 		return dataRow;
 	});
 }
@@ -119,6 +120,10 @@ function tableFactory(monsters) {
 	return tableRows;
 }
 
+/**************************************************************
+ * fetches monsters and their data
+ * amount of monsters are controlled by constants in top
+ * ***********************************************************/
 async function catchMonsters() {
 	const monsterTrackers = await getJson(dndApi.monsters());
 	//print("fetchMonsters", "monsterTrackers", monsterTrackers); 
@@ -138,8 +143,10 @@ async function catchMonsters() {
 	return wildMonsters;
 }
 
+/***********************************************************
+ * extracts wanted monster values into a flat object array
+ * ********************************************************/
 function monsterWasher(dirtyMonsters) {
-	//some monster are missing values, others are nested, have to be handled seperatly
 	
 	const cleanMonsters = dirtyMonsters.map(dirty => {
 		const clean = {};
@@ -154,6 +161,7 @@ function monsterWasher(dirtyMonsters) {
 	//print("monsterWasher","cleanMonsters", cleanMonsters);
 	return cleanMonsters;
 }
+
 /*******************************************************
  * checks if @target got a value, else give it one
  * *****************************************************/
@@ -162,6 +170,7 @@ function washdroid(target) {
 	if (target) return target
 	else return 0;
 }
+
 /**********************************************************
  * takes a table DOM element as argument
  *  1.fetch monsters
