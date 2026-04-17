@@ -85,23 +85,24 @@ async function catchMonsters() {
 	const choosenTrackers = monsterTrackers.results.slice(monsterStart, monsterEnd)
 	
 	const wildMonsters = await choosenTrackers.map(async (mi) => {
-		//print("fetchMonsters", "mi", mi);
+		print("fetchMonsters", "mi", mi);
 
 		 await getJson(dndApi.url + mi.url);
 	
 	});
+	console.log("Wild Monsters are cathed and ready to return");
 	return wildMonsters;
 }
 
 function monsterWasher(dirtyMonsters) {
-	print("monsterWasher", "dirtyMonsters", dirtyMonsters);
+	//print("monsterWasher", "dirtyMonsters", dirtyMonsters);
 
 	const cleanMonster = {};
 
 	cleanMonster.name = dirtyMonsters.name;
 	cleanMonster.size = dirtyMonsters.size;
 	cleanMonster.type = dirtyMonsters.type;
-	cleanMonster.armor = dirtyMonsters.armor_class[1];
+	//cleanMonster.armor = dirtyMonsters.armor_class[1];
 	cleanMonster.health = dirtyMonsters.hit_points;
 
 	return cleanMonster;
