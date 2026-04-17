@@ -3,11 +3,11 @@ const monsterContainerAlpha = document.getElementById("monster-container-alpha")
 const monsterTableAlpha = document.getElementById("monster-table-alpha");
 
 //load monsters from local storage
-const monsterCatalog = JSON.parse(localStorage.getItem("monsterCatalog"));
+let monsterCatalog = JSON.parse(localStorage.getItem("monsterCatalog"));
 
 //Monster Imigration policies
 const monsterStart = 99; //what index to start picking from
-const amountMonsters = 10; //how many monsters to fetch
+const amountMonsters = 15; //how many monsters to fetch
 const monsterEnd = monsterStart + amountMonsters; //for Arr.slice() 
 
 /*************************************************************
@@ -128,10 +128,11 @@ function tableFactory(monsters) {
  * amount of monsters are controlled by constants in top
  * ***********************************************************/
 async function catchMonsters() {
-	if(0 <= monsterCatalog.length) return monsterCatalog;
+	if(monsterCatalog) return monsterCatalog;
 	const monsterTrackers = await getJson(dndApi.monsters());
 	//print("fetchMonsters", "monsterTrackers", monsterTrackers); 
 	
+	//const choosenTrackers = monsterTrackers.results;//gets all monsters now
 	const choosenTrackers = monsterTrackers.results.slice(monsterStart, monsterEnd)
 	
 	//Promise runs independent awaits concurrently
@@ -144,7 +145,7 @@ async function catchMonsters() {
 	);
 
 	//print("catchMonsters", "wildMonsters", wildMonsters);
-	print("catchMonsters", "wildMonsters['frog']", wildMonsters['frog']);
+	//print("catchMonsters", "wildMonsters['frog']", wildMonsters['frog']);
 
 	//save Monsters to avoid api rate-limit
 	monsterCatalog = wildMonsters;
