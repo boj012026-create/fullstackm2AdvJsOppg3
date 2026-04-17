@@ -84,12 +84,14 @@ async function catchMonsters() {
 	
 	const choosenTrackers = monsterTrackers.results.slice(monsterStart, monsterEnd)
 	
-	const wildMonsters = await choosenTrackers.map(async (mi) => {
+	//Promise runs independent awaits concurrently
+	const wildMonsters = await Promise.all( choosenTrackers.map(async (mi) => {
 		print("catchMonsters", "mi", mi);
 
 		//returns one of many monsters to an array
 		return await getJson(dndApi.url + mi.url);
-	});
+	})
+	);
 
 	print("catchMonsters", "wildMonsters", wildMonsters);
 	return wildMonsters;
