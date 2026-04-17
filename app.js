@@ -1,10 +1,14 @@
 const monsterContainer = document.getElementById("monster-container");
 
-//these two decides how many monsters are fetched
-const monsterStart = 99
-const amountMonsters = monsterStart + 10;
+//Monster Imigration policies
+const monsterStart = 99; //what index to start picking from
+const amountMonsters = 10; //how many monsters to fetch
+const monsterEnd = monsterStart + monsterEnd; //for Arr.slice() 
 
-//Todo Connect API
+/*************************************************************
+ * api doesn't support limit or offset querry parmameters.
+ * But does have a rate limit.
+ *************************************************************/
 const dndApi = {
 	url: "https://www.dnd5eapi.co",
 	api2014: function() {return `${this.url}/api/2014/`},
@@ -74,17 +78,19 @@ function tableFactory(monsters) {
 	return tableRows;
 }
 
-async function fetchMonsters() {
-	const monsterIndex = await getJson(dndApi.monsters());
-	//print("fetchMonsters", "monsterIndex", monsterIndex); 
+async function catchMonsters() {
+	const monsterTrackers = await getJson(dndApi.monsters());
+	//print("fetchMonsters", "monsterTrackers", monsterTrackers); 
 	
-	const monsterFacts = await monsterIndex.results.map(async (mi) => {
+	const choosenTrackers = monsterTrackers.results.slice(monsterStart, monsterEnd)
+	
+	const wildMonsters = await choosenTrackers.map(async (mi) => {
 		//print("fetchMonsters", "mi", mi);
 
-		const dirtyMonster = await getJson(dndApi.url + mi.url);
+		 await getJson(dndApi.url + mi.url);
 	
 	});
-	return monsterFacts;
+	return wildMonsters;
 }
 
 function monsterWasher(dirtyMonsters) {
@@ -100,7 +106,8 @@ function monsterWasher(dirtyMonsters) {
 }
 
 function buildMonsterTable(table) {
-	fetchMonsters()
+	catchMonsters()
+		.then(dirtyMonsters => monsterWasher(dirtyMonsters))
 		.then(monsters => tableFactory(monsters))
 		.then(monsterRows => table.append(monsterRows)); 
 }
