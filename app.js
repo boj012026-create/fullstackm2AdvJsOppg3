@@ -77,13 +77,17 @@ function buildTableTitles(monsterObjArr) {
 		tableHeader.append(title);
 	});
 
-	print("buildTableTitles", "tableHeader", tableHeader);
+	//print("buildTableTitles", "tableHeader", tableHeader);
 	return tableHeader
 }
-
+/************************************************************
+ * returns an array of tableRows
+ * **********************************************************/
 function tableFactory(monsters) {
 	const tableRows = [];
 	tableRows.push(buildTableTitles(monsters));
+	
+	print("tableFactory", "tableRows", tableRows);
 	return tableRows;
 }
 
@@ -135,7 +139,7 @@ function buildMonsterTable(table) {
 	catchMonsters()
 		.then(wildMonsters => monsterWasher(wildMonsters))
 		.then(cleanMonsters => tableFactory(cleanMonsters))
-		.then(monsterRows => table.append(monsterRows)); 
+		.then(monsterRows => table.append(...monsterRows)); 
 }
 
 function renderPage() {
