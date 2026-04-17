@@ -1,6 +1,7 @@
 const monsterContainer = document.getElementById("monster-container");
 
-const monsterStart = 99;
+//these two decides how many monsters are fetched
+const monsterStart = 99
 const amountMonsters = monsterStart + 10;
 
 //Todo Connect API
@@ -21,7 +22,7 @@ function print(funcName, objName, obj) {
 
 async function getJson(apiUrl) {
 	const response = await fetch(apiUrl);
-	//print("getJson", "response", response) 
+	//print("getJson", "response", response)
 	
 	if (response.ok) {
 		const json = await response.json()
@@ -81,17 +82,21 @@ async function fetchMonsters() {
 		//print("fetchMonsters", "mi", mi);
 
 		const dirtyMonster = await getJson(dndApi.url + mi.url);
-		const cleanMonster = {};
-
-		cleanMonster.name = await dirtyMonster.name;
-		cleanMonster.size = await dirtyMonster.size;
-		cleanMonster.type = await dirtyMonster.type;
-		cleanMonster.armor = await dirtyMonster.armor_class[1];
-		cleanMonster.health = await dirtyMonster.hit_points;
-
-		return cleanMonster;
+	
 	});
 	return monsterFacts;
+}
+
+function monsterWasher(dirtyMonsters) {
+	const cleanMonster = {};
+
+	cleanMonster.name = dirtyMonster.name;
+	cleanMonster.size = dirtyMonster.size;
+	cleanMonster.type = dirtyMonster.type;
+	cleanMonster.armor = dirtyMonster.armor_class[1];
+	cleanMonster.health = dirtyMonster.hit_points;
+
+	return cleanMonster;
 }
 
 function buildMonsterTable(table) {
