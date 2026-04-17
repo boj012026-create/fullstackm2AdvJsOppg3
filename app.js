@@ -2,6 +2,9 @@ const monsterContainer = document.getElementById("monster-container");
 const monsterContainerAlpha = document.getElementById("monster-container-alpha");
 const monsterTableAlpha = document.getElementById("monster-table-alpha");
 
+//load monsters from local storage
+const monsterCatalog = JSON.parse(localStorage.getItem("monsterCatalog"));
+
 //Monster Imigration policies
 const monsterStart = 99; //what index to start picking from
 const amountMonsters = 10; //how many monsters to fetch
@@ -125,6 +128,7 @@ function tableFactory(monsters) {
  * amount of monsters are controlled by constants in top
  * ***********************************************************/
 async function catchMonsters() {
+	if(0 <= monsterCatalog.length) return monsterCatalog;
 	const monsterTrackers = await getJson(dndApi.monsters());
 	//print("fetchMonsters", "monsterTrackers", monsterTrackers); 
 	
@@ -140,6 +144,11 @@ async function catchMonsters() {
 	);
 
 	//print("catchMonsters", "wildMonsters", wildMonsters);
+	print("catchMonsters", "wildMonsters['frog']", wildMonsters['frog']);
+
+	//save Monsters to avoid api rate-limit
+	monsterCatalog = wildMonsters;
+	localStorage.setItem("monsterCatalog",JSON.stringify(monsterCatalog)); 
 	return wildMonsters;
 }
 
@@ -150,7 +159,7 @@ function monsterWasher(dirtyMonsters) {
 	
 	const cleanMonsters = dirtyMonsters.map(dirty => {
 		const clean = {};
-		clean.name = washdroid(dirty.name);
+		clean.name = washdroid(dirty.index);
 		clean.size = washdroid(dirty.size);
 		clean.type = washdroid(dirty.type);
 		clean.armor = washdroid(dirty.armor_class[0].value);
@@ -166,7 +175,6 @@ function monsterWasher(dirtyMonsters) {
  * checks if @target got a value, else give it one
  * *****************************************************/
 function washdroid(target) {
-	//if 
 	if (target) return target
 	else return 0;
 }
@@ -190,5 +198,4 @@ function renderPage() {
 	buildMonsterTable(monsterTableAlpha);
 }
 
-renderPage();
 renderPage();
