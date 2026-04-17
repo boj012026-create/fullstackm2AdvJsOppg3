@@ -98,18 +98,19 @@ async function catchMonsters() {
 }
 
 function monsterWasher(dirtyMonsters) {
-	//print("monsterWasher", "dirtyMonsters", dirtyMonsters);
-
 	//some monster are missing values, others are nested, have to be handled seperatly
+	
+	dirtyMonsters.forEach(dirtyMonster => {
 	const cleanMonster = {};
 
-	cleanMonster.name = washdroid(dirtyMonsters.name);
-	cleanMonster.size = washdroid(dirtyMonsters.size);
-	cleanMonster.type = washdroid(dirtyMonsters.type);
-	cleanMonster.armor = washdroid(dirtyMonsters.armor_class[1]);
-	cleanMonster.health = washdroid(dirtyMonsters.hit_points);
+	cleanMonster.name = washdroid(dirtyMonster.name);
+	cleanMonster.size = washdroid(dirtyMonster.size);
+	cleanMonster.type = washdroid(dirtyMonster.type);
+	cleanMonster.armor = washdroid(dirtyMonster.armor_class[1]);
+	cleanMonster.health = washdroid(dirtyMonster.hit_points);
 
 	return cleanMonster;
+	});
 }
 /*******************************************************
  * checks if @target got a value, else give it one
