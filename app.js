@@ -3,7 +3,7 @@ const monsterContainer = document.getElementById("monster-container");
 //Monster Imigration policies
 const monsterStart = 99; //what index to start picking from
 const amountMonsters = 10; //how many monsters to fetch
-const monsterEnd = monsterStart + monsterEnd; //for Arr.slice() 
+const monsterEnd = monsterStart + amountMonsters; //for Arr.slice() 
 
 /*************************************************************
  * api doesn't support limit or offset querry parmameters.
