@@ -90,7 +90,7 @@ async function catchMonsters() {
 		 await getJson(dndApi.url + mi.url);
 	
 	});
-	console.log("Wild Monsters are cathed and ready to return");
+	console.log("Wild Monsters are catched and ready to return");
 	return wildMonsters;
 }
 
