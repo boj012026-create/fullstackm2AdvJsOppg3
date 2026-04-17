@@ -2,6 +2,7 @@ const monsterContainer = document.getElementById("monster-container");
 const monsterContainerAlpha = document.getElementById("monster-container-alpha");
 const monsterTableAlpha = document.getElementById("monster-table-alpha");
 
+const useLocalStorage = false; //limits download when false
 //load monsters from local storage
 let monsterCatalog = JSON.parse(localStorage.getItem("monsterCatalog"));
 
@@ -73,11 +74,11 @@ function buildMonsters() {
  * returns one table header with objArr's key  titles
  * ************************************************************/
 function buildTableTitles(monsterObjArr) {
-	//print("buildTableTitles", "monsterObjArr", monsterObjArr);
+	print("buildTableTitles", "monsterObjArr", monsterObjArr);
 	const tableHeader = document.createElement('tr');
 	
 	const monsterKeys = Object.keys(monsterObjArr[0]);
-	//print("buildTableTitles", "monsterKeys", monsterKeys);
+	print("buildTableTitles", "monsterKeys", monsterKeys);
 
 	monsterKeys.forEach(key => {
 		const title = document.createElement('th');
@@ -115,6 +116,7 @@ function buildTableRows(monsterObjArr) {
  * returns an array of tableRows
  * **********************************************************/
 function tableFactory(monsters) {
+	print("tableFactory", "monsters", monsters);
 	const tableRows = [];
 	tableRows.push(buildTableTitles(monsters));
 	tableRows.push(...buildTableRows(monsters));
@@ -128,24 +130,29 @@ function tableFactory(monsters) {
  * amount of monsters are controlled by constants in top
  * ***********************************************************/
 async function catchMonsters() {
-	if(monsterCatalog) return monsterCatalog;
+	if(monsterCatalog && useLocalStorage) return monsterCatalog;
+
 	const monsterTrackers = await getJson(dndApi.monsters());
 	//print("fetchMonsters", "monsterTrackers", monsterTrackers); 
 	
-	//const choosenTrackers = monsterTrackers.results;//gets all monsters now
+
 	const choosenTrackers = monsterTrackers.results.slice(monsterStart, monsterEnd)
-	
-	//Promise runs independent awaits concurrently
-	const wildMonsters = await Promise.all( choosenTrackers.map((mi) => {
+	if(useLocalStorage) {
+		choosenTrackers = monsterTrackers.results;//gets all monsters
+	}
+	else  {
+		localStorage.clear();
+	}
+	//Promise runs independent awaits concurrently but overloaded api
+	const wildMonsters = [];
+	await choosenTrackers.map(async (mi) => {
 		//print("catchMonsters", "mi", mi);
 
-		//returns one of many monsters to an array
-		return getJson(dndApi.url + mi.url);
-	})
-	);
+		const newMonster = await getJson(dndApi.url + mi.url);
+		wildMonsters.push(newMonster);
+	});
 
-	//print("catchMonsters", "wildMonsters", wildMonsters);
-	//print("catchMonsters", "wildMonsters['frog']", wildMonsters['frog']);
+	print("catchMonsters", "wildMonsters", wildMonsters);
 
 	//save Monsters to avoid api rate-limit
 	monsterCatalog = wildMonsters;
@@ -168,7 +175,7 @@ function monsterWasher(dirtyMonsters) {
 		return clean;
 	});
 
-	//print("monsterWasher","cleanMonsters", cleanMonsters);
+	print("monsterWasher","cleanMonsters", cleanMonsters);
 	return cleanMonsters;
 }
 
