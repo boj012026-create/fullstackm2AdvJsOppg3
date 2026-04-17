@@ -65,7 +65,10 @@ function buildMonsters() {
 		.then(monsters => monsterContainer.append(monsters));
 
 }
-
+/**************************************************************
+ * returns table header with objArr's key  titles
+ * 
+ * ************************************************************/
 function buildTableTitles(monsterObjArr) {
 	//print("buildTableTitles", "monsterObjArr", monsterObjArr);
 	const tableHeader = document.createElement('tr');
@@ -82,14 +85,37 @@ function buildTableTitles(monsterObjArr) {
 	//print("buildTableTitles", "tableHeader", tableHeader);
 	return tableHeader
 }
+
+function buildTableRows(monsterObjArr) {
+	return monsterObjArr.map(m => {
+		const dataRow = document.createElement('tr');
+		//print("buildTableRows", "m", m) 
+		
+		const monsterKeys = Object.keys(m);
+		//print("buildTableRows", "monsterKeys", monsterKeys) 
+
+		Object.keys(m).forEach(key => {
+			const data = document.createElement('td');
+
+			data.textContent = m[key];
+			//print("buildTableRows", "m.key", m[key]);
+			dataRow.append(data);
+		});
+
+		print("buildTablerows", "dataRow", dataRow);
+		return dataRow;
+	});
+}
+
 /************************************************************
  * returns an array of tableRows
  * **********************************************************/
 function tableFactory(monsters) {
 	const tableRows = [];
 	tableRows.push(buildTableTitles(monsters));
+	tableRows.push(...buildTableRows(monsters));
 	
-	print("tableFactory", "tableRows", tableRows);
+	//print("tableFactory", "tableRows", tableRows);
 	return tableRows;
 }
 
@@ -136,7 +162,13 @@ function washdroid(target) {
 	if (target) return target
 	else return 0;
 }
-
+/**********************************************************
+ * takes a table DOM element as argument
+ *  1.fetch monsters
+ *  2.clean data
+ *  3.creates DOM rows from monster data
+ *  4.table appends an array of rows
+ * ********************************************************/
 function buildMonsterTable(table) {
 	catchMonsters()
 		.then(wildMonsters => monsterWasher(wildMonsters))
