@@ -107,8 +107,8 @@ function monsterWasher(dirtyMonsters) {
 
 function buildMonsterTable(table) {
 	catchMonsters()
-		.then(dirtyMonsters => monsterWasher(dirtyMonsters))
-		.then(monsters => tableFactory(monsters))
+		.then(wildMonsters => monsterWasher(wildMonsters))
+		.then(cleanMonsters => tableFactory(cleanMonsters))
 		.then(monsterRows => table.append(monsterRows)); 
 }
 
