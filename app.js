@@ -43,7 +43,7 @@ function monsterFactory(monsterJson) {
 	
 		monsterOrder.forEach(async monster => {
 			const monsterData = await getJson(dndApi.url + monster.url)
-			print("monsterFactory", "monsterData", monsterData);
+			//print("monsterFactory", "monsterData", monsterData);
 
 			const monsterTitle = document.createElement('h2');
 			monsterTitle.textContent = monster.name;
@@ -65,11 +65,15 @@ function buildMonsters() {
 }
 
 function buildTableTitles(monsterObjArr) {
-	const tableHead = document.createElement('tr');
-	Object.keys(monsterObjArr[0]).forEach(key => {
-		const titleRow = document.createElement('th');
-		titleRow.textContent = key;
+	const tableHeader = document.createElement('tr');
+	
+	const monsterKeys = Object.keys(monsterObjArr);
+	monsterKeys.forEach(key => {
+		const title = document.createElement('th');
+		title.textContent = key;
+		tableHeader.append(title);
 	});
+	return tableHeader
 }
 
 function tableFactory(monsters) {
@@ -93,7 +97,7 @@ async function catchMonsters() {
 	})
 	);
 
-	print("catchMonsters", "wildMonsters", wildMonsters);
+	//print("catchMonsters", "wildMonsters", wildMonsters);
 	return wildMonsters;
 }
 
@@ -110,7 +114,7 @@ function monsterWasher(dirtyMonsters) {
 		return clean;
 	});
 
-	print("monsterWasher","cleanMonsters", cleanMonsters);
+	//print("monsterWasher","cleanMonsters", cleanMonsters);
 	return cleanMonsters;
 }
 /*******************************************************
