@@ -96,11 +96,11 @@ async function catchMonsters() {
 function monsterWasher(dirtyMonsters) {
 	const cleanMonster = {};
 
-	cleanMonster.name = dirtyMonster.name;
-	cleanMonster.size = dirtyMonster.size;
-	cleanMonster.type = dirtyMonster.type;
-	cleanMonster.armor = dirtyMonster.armor_class[1];
-	cleanMonster.health = dirtyMonster.hit_points;
+	cleanMonster.name = dirtyMonsters.name;
+	cleanMonster.size = dirtyMonsters.size;
+	cleanMonster.type = dirtyMonsters.type;
+	cleanMonster.armor = dirtyMonsters.armor_class[1];
+	cleanMonster.health = dirtyMonsters.hit_points;
 
 	return cleanMonster;
 }
