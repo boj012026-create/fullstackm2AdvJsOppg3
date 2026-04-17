@@ -1,4 +1,6 @@
 const monsterContainer = document.getElementById("monster-container");
+const monsterContainerAlpha = document.getElementById("monster-container-alpha");
+const monsterTableAlpha = document.getElementById("monster-table-alpha");
 
 //Monster Imigration policies
 const monsterStart = 99; //what index to start picking from
@@ -144,7 +146,7 @@ function buildMonsterTable(table) {
 
 function renderPage() {
 	//buildMonsters();
-	buildMonsterTable();
+	buildMonsterTable(monsterTableAlpha);
 }
 
 renderPage();
