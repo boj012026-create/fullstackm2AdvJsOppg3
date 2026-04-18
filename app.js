@@ -131,11 +131,12 @@ function tableFactory(monsters) {
  * amount of monsters are controlled by constants in top
  * ***********************************************************/
 async function catchMonsters() {
+	print("fetchMonsters", "monsterCatalog", monsterCatalog); 
 
 	const monsterTrackers = await getJson(dndApi.monsters());
 	//print("fetchMonsters", "monsterTrackers", monsterTrackers); 
 
-	const choosenTrackers = monsterTrackers.results.slice(monsterStart, monsterEnd)
+	let choosenTrackers = monsterTrackers.results.slice(monsterStart, monsterEnd)
 
 	if(useLocalStorage) {
 		loadLocalMonsters();
@@ -171,8 +172,8 @@ function monsterStored(monster) {
 
 function loadLocalMonsters() {
 	if(useLocalStorage) {
-		let loadedMonsters = JSON.parse(localStorage.getItem("monsterCatalog"));
-	} 
+		let monsterCatalog = JSON.parse(localStorage.getItem("monsterCatalog"));
+	}
 }
 
 function storeMonster(monster) {
@@ -184,20 +185,12 @@ function storeMonster(monster) {
 	}
 }
 
-//function saveMonsters(monster) {
-	//monsterCatalog = monsterArr;
-	//if(useLocalStorage) {
-	//localStorage.setItem("monsterCatalog",JSON.stringify(monsterCatalog)); 
-	//} else {
-		//localStorage.clear();
-	//}
-//}
-
 /***********************************************************
  * extracts wanted monster values into a flat object array
  * ********************************************************/
 function monsterWasher(dirtyMonsters) {
 	print("monsterWasher", "dirtyMonsters", dirtyMonsters);	
+	print("monsterWasher", "dirtyMonsters.length", dirtyMonsters.length);	
 
 	const cleanMonsters = dirtyMonsters.map(dirty => {
 		print("monsterWasher", "dirty", dirty);	
