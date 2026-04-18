@@ -4,12 +4,13 @@ const monsterTableAlpha = document.getElementById("monster-table-alpha");
 
 const useLocalStorage = false; //limits download when false
 //load monsters from local storage
-let monsterCatalog = JSON.parse(localStorage.getItem("monsterCatalog"));
 
 //Monster Imigration policies
 const monsterStart = 99; //what index to start picking from
 const amountMonsters = 15; //how many monsters to fetch
 const monsterEnd = monsterStart + amountMonsters; //for Arr.slice() 
+
+let monsterCatalog = new Map;
 
 /*************************************************************
  * api doesn't support limit or offset querry parmameters.
@@ -130,35 +131,67 @@ function tableFactory(monsters) {
  * amount of monsters are controlled by constants in top
  * ***********************************************************/
 async function catchMonsters() {
-	if(monsterCatalog && useLocalStorage) return monsterCatalog;
 
 	const monsterTrackers = await getJson(dndApi.monsters());
 	//print("fetchMonsters", "monsterTrackers", monsterTrackers); 
-	
 
 	const choosenTrackers = monsterTrackers.results.slice(monsterStart, monsterEnd)
+
 	if(useLocalStorage) {
+		loadLocalMonsters();
 		choosenTrackers = monsterTrackers.results;//gets all monsters
 	}
-	else  {
-		localStorage.clear();
-	}
+
 	//Promise runs independent awaits concurrently but overloaded api
 	const wildMonsters = [];
-	await choosenTrackers.map(async (mi) => {
+	await choosenTrackers.forEach(async (mi) => {
 		//print("catchMonsters", "mi", mi);
 
-		const newMonster = await getJson(dndApi.url + mi.url);
-		wildMonsters.push(newMonster);
+		if(monsterStored(mi)) {
+			wildMonsters.push(monsterCatalog.get(mi.index));
+		} else {
+			const newMonster = await getJson(dndApi.url + mi.url);
+			wildMonsters.push(newMonster);
+
+			//saves new monster
+			storeMonster(newMonster);
+		}
 	});
 
 	print("catchMonsters", "wildMonsters", wildMonsters);
 
 	//save Monsters to avoid api rate-limit
-	monsterCatalog = wildMonsters;
-	localStorage.setItem("monsterCatalog",JSON.stringify(monsterCatalog)); 
+	//saveMonsters(wildMonsters);
 	return wildMonsters;
 }
+
+function monsterStored(monster) {
+	return monsterCatalog.has(monster.index);	
+}
+
+function loadLocalMonsters() {
+	if(useLocalStorage) {
+		let loadedMonsters = JSON.parse(localStorage.getItem("monsterCatalog"));
+	} 
+}
+
+function storeMonster(monster) {
+	monsterCatalog.set(monster.index, monster);
+	if(useLocalStorage) {
+	localStorage.setItem("monsterCatalog",JSON.stringify(monsterCatalog)); 
+	} else {
+		localStorage.clear();
+	}
+}
+
+//function saveMonsters(monster) {
+	//monsterCatalog = monsterArr;
+	//if(useLocalStorage) {
+	//localStorage.setItem("monsterCatalog",JSON.stringify(monsterCatalog)); 
+	//} else {
+		//localStorage.clear();
+	//}
+//}
 
 /***********************************************************
  * extracts wanted monster values into a flat object array
