@@ -2,7 +2,7 @@ const monsterContainer = document.getElementById("monster-container");
 const monsterContainerAlpha = document.getElementById("monster-container-alpha");
 const monsterTableAlpha = document.getElementById("monster-table-alpha");
 
-const useLocalStorage = false; //limits download when false
+const useLocalStorage = true; //used to avoid api rate limit
 //load monsters from local storage
 
 //Monster Imigration policies
@@ -140,10 +140,10 @@ async function catchMonsters() {
 
 	if(useLocalStorage) {
 		loadLocalMonsters();
-		choosenTrackers = monsterTrackers.results;//gets all monsters
+		//choosenTrackers = monsterTrackers.results;//gets all monsters
 	}
 
-	//Promise runs independent awaits concurrently but overloaded api
+	//Promise runs independent awaits concurrently, but overloaded api
 	const wildMonsters = await Promise.all( choosenTrackers.map(async (mi) => {
 		//print("catchMonsters", "mi", mi);
 
@@ -168,6 +168,7 @@ async function catchMonsters() {
 }
 
 function monsterStored(monster) {
+	print("monsterStored", "monster", monster);
 	return monsterCatalog.has(monster.index);	
 }
 
