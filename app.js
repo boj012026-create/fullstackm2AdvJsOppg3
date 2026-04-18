@@ -164,8 +164,10 @@ async function catchMonsters() {
  * extracts wanted monster values into a flat object array
  * ********************************************************/
 function monsterWasher(dirtyMonsters) {
-	
+	print("monsterWasher", "dirtyMonsters", dirtyMonsters);	
+
 	const cleanMonsters = dirtyMonsters.map(dirty => {
+		print("monsterWasher", "dirty", dirty);	
 		const clean = {};
 		clean.name = washdroid(dirty.index);
 		clean.size = washdroid(dirty.size);
