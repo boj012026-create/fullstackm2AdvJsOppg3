@@ -43,33 +43,33 @@ async function getJson(apiUrl) {
 	}
 }
 
-function monsterFactory(monsterJson) {
-	//print("monsterFactory", "monsterJson", monsterJson);
+//function monsterFactory(monsterJson) {
+	////print("monsterFactory", "monsterJson", monsterJson);
 	
-	const monsterOrder = monsterJson.results.slice(monsterStart, amountMonsters);
+	//const monsterOrder = monsterJson.results.slice(monsterStart, amountMonsters);
 	
-		monsterOrder.forEach(async monster => {
-			const monsterData = await getJson(dndApi.url + monster.url)
-			//print("monsterFactory", "monsterData", monsterData);
+			//monsterOrder.forEach(async monster => {
+			//const monsterData = await getJson(dndApi.url + monster.url)
+			////print("monsterFactory", "monsterData", monsterData);
 
-			const monsterTitle = document.createElement('h2');
-			monsterTitle.textContent = monster.name;
+			//const monsterTitle = document.createElement('h2');
+			//monsterTitle.textContent = monster.name;
 
-			const monsterImg = document.createElement('img');
-			const imgPath = dndApi.url + monsterData.image;
-			//print("monsterFactory", "imgPath", imgPath);
-			monsterImg.src = imgPath; 
+			//const monsterImg = document.createElement('img');
+			//const imgPath = dndApi.url + monsterData.image;
+			////print("monsterFactory", "imgPath", imgPath);
+			//monsterImg.src = imgPath; 
 
-			monsterContainer.append(monsterTitle, monsterImg);
-		});
-}
+			//monsterContainer.append(monsterTitle, monsterImg);
+		//});
+//}
 
-function buildMonsters() {
-	getJson(dndApi.monsters())
-		.then(json => monsterFactory(json))
-		.then(monsters => monsterContainer.append(monsters));
+//function buildMonsters() {
+	//getJson(dndApi.monsters())
+		//.then(json => monsterFactory(json))
+		//.then(monsters => monsterContainer.append(monsters));
 
-}
+//}
 
 /**************************************************************
  * returns one table header with objArr's key  titles
@@ -145,24 +145,27 @@ async function catchMonsters() {
 
 	//Promise runs independent awaits concurrently but overloaded api
 	const wildMonsters = [];
-	await choosenTrackers.forEach(async (mi) => {
+	choosenTrackers.forEach(async (mi) => {
 		//print("catchMonsters", "mi", mi);
 
 		if(monsterStored(mi)) {
+			const oldMonster = monsterCatalog.get(mi.index)
+			print("catchMonsters", "oldMonster",oldMonster);
+
 			wildMonsters.push(monsterCatalog.get(mi.index));
 		} else {
 			const newMonster = await getJson(dndApi.url + mi.url);
+			print("catchMonsters", "newMosnter",newMonster);
+
 			wildMonsters.push(newMonster);
 
 			//saves new monster
 			storeMonster(newMonster);
 		}
 	});
+	wildMonsters.forEach(m => console.log(m));
 
 	print("catchMonsters", "wildMonsters", wildMonsters);
-
-	//save Monsters to avoid api rate-limit
-	//saveMonsters(wildMonsters);
 	return wildMonsters;
 }
 
@@ -172,7 +175,9 @@ function monsterStored(monster) {
 
 function loadLocalMonsters() {
 	if(useLocalStorage) {
-		let monsterCatalog = JSON.parse(localStorage.getItem("monsterCatalog"));
+		monsterCatalog = JSON.parse(localStorage.getItem("monsterCatalog"));
+	} else {
+		localStorage.clear();
 	}
 }
 
@@ -180,8 +185,6 @@ function storeMonster(monster) {
 	monsterCatalog.set(monster.index, monster);
 	if(useLocalStorage) {
 	localStorage.setItem("monsterCatalog",JSON.stringify(monsterCatalog)); 
-	} else {
-		localStorage.clear();
 	}
 }
 
