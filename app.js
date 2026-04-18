@@ -144,27 +144,23 @@ async function catchMonsters() {
 	}
 
 	//Promise runs independent awaits concurrently but overloaded api
-	const wildMonsters = [];
-	await choosenTrackers.forEach(async (mi) => {
+	const wildMonsters = await Promise.all( choosenTrackers.map(async (mi) => {
 		//print("catchMonsters", "mi", mi);
 
 		if(monsterStored(mi)) {
 			const oldMonster = monsterCatalog.get(mi.index)
 			//print("catchMonsters", "oldMonster",oldMonster);
 
-			wildMonsters.push(monsterCatalog.get(mi.index));
+			return monsterCatalog.get(mi.index);
 		} else {
 			const newMonster = await getJson(dndApi.url + mi.url);
 			//print("catchMonsters", "newMosnter",newMonster);
 
-			wildMonsters.push(newMonster);
-			//print("catchMonsters", "wildMonster after push()",wildMonsters);
-			
-
 			//saves new monster
 			storeMonster(newMonster);
+			return newMonster;
 		}
-	});
+	}));
 
 
 	print("catchMonsters", "wildMonsters", wildMonsters);
