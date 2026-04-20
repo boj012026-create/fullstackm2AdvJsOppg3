@@ -174,7 +174,10 @@ function monsterStored(monster) {
 
 function loadLocalMonsters() {
 	if(useLocalStorage) {
-		monsterCatalog = JSON.parse(localStorage.getItem("monsterCatalog"));
+		const json = localStorage.getItem("monsterCatalog");
+		if (json) {
+			monsterCatalog = JSON.parse(json);
+		}
 	} else {
 		localStorage.clear();
 	}
