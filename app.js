@@ -214,12 +214,14 @@ function washdroid(target) {
  *  2.clean data
  *  3.creates DOM rows from monster data
  *  4.table appends an array of rows
+ *
+ *  @bp blueprint
  * ********************************************************/
-function buildMonsterTable(table) {
+function buildMonsterTable(bp) {
 	catchMonsters()
 		.then(wildMonsters => monsterWasher(wildMonsters))
 		.then(cleanMonsters => tableFactory(cleanMonsters))
-		.then(monsterRows => table.replaceChildren(...monsterRows)); 
+		.then(monsterRows => bp.table.replaceChildren(...monsterRows)); 
 }
 /**
  * builds a monster based on blueprint
@@ -236,7 +238,7 @@ function buildMonster(pb) {
 
 function renderPage() {
 	buildMonster(alpha);
-	buildMonsterTable(alpha.table);
+	buildMonsterTable(alpha);
 }
 
 renderPage();
