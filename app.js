@@ -1,10 +1,8 @@
-const monsterContainer = document.getElementById("monster-container");
-const monsterContainerAlpha = document.getElementById("monster-container-alpha");
-//const monsterTableAlpha = document.getElementById("monster-table-alpha");
 
 const alpha = {
 	index: "adult-black-dragon",
-	table: document.getElementById("monster-table-alpha")
+	table: document.getElementById("monster-table-alpha"),
+	monsterContainer: document.getElementById("monster-container-alpha")
 }
 
 //when using local storage things break
@@ -233,7 +231,7 @@ function buildMonster(container, monsterIndex) {
 }
 
 function renderPage() {
-	buildMonster(monsterContainerAlpha, alpha.index);
+	buildMonster(alpha.monsterContainer, alpha.index);
 	buildMonsterTable(alpha.table);
 }
 
