@@ -1,4 +1,10 @@
-
 body {
 	background-color: blue;
+}
+
+.monster-container {
+	img {
+		height: 100%;
+	}
+	height: 50vh;
 }

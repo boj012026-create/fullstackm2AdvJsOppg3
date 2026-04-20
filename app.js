@@ -2,6 +2,10 @@ const monsterContainer = document.getElementById("monster-container");
 const monsterContainerAlpha = document.getElementById("monster-container-alpha");
 const monsterTableAlpha = document.getElementById("monster-table-alpha");
 
+const alpha = {
+	index: "adult-black-dragon"
+}
+
 //when using local storage things break
 const useLocalStorage = false; //used to avoid api rate limit
 //load monsters from local storage
@@ -100,14 +104,27 @@ function buildTableRows(monsterObjArr) {
 	return monsterObjArr.map(m => {
 		const dataRow = document.createElement('tr');
 		//print("buildTableRows", "m", m) 
+
 		
 		Object.keys(m).forEach(key => {
 			const data = document.createElement('td');
-
+		
 			data.textContent = m[key];
 			//print("buildTableRows", "m.key", m[key]);
+
+
+
 			dataRow.append(data);
 		});
+
+		const rowBtn = document.createElement('button');
+		rowBtn.textContent = "Show";
+		rowBtn.addEventListener('click', () => {
+			alpha.index = m.name;
+			renderPage();
+		});
+
+		dataRow.append(rowBtn);
 
 		//print("buildTablerows", "dataRow", dataRow);
 		return dataRow;
@@ -236,8 +253,16 @@ function buildMonsterTable(table) {
 		.then(monsterRows => table.replaceChildren(...monsterRows)); 
 }
 
+function buildMonster(container, monsterIndex) {
+	const monsterImg = document.createElement('img')
+	//const imgpath = dndApi.url + "/images/monsters/" + 
+	const imgPath = `${dndApi.url}/api/images/monsters/${monsterIndex}.png`; 
+	monsterImg.src = imgPath;
+	container.replaceChildren(monsterImg);
+}
+
 function renderPage() {
-	//buildMonsters();
+	buildMonster(monsterContainerAlpha, alpha.index);
 	buildMonsterTable(monsterTableAlpha);
 }
 
