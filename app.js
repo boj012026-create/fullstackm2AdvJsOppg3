@@ -5,6 +5,12 @@ const alpha = {
 	monsterContainer: document.getElementById("monster-container-alpha")
 }
 
+const beta = {
+	index: "adult-black-dragon",
+	table: document.getElementById("monster-table-beta"),
+	monsterContainer: document.getElementById("monster-container-beta")
+}
+
 //when using local storage things break
 const useLocalStorage = false; //used to avoid api rate limit
 //load monsters from local storage
