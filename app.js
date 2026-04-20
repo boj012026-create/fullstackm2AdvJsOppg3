@@ -1,9 +1,10 @@
 const monsterContainer = document.getElementById("monster-container");
 const monsterContainerAlpha = document.getElementById("monster-container-alpha");
-const monsterTableAlpha = document.getElementById("monster-table-alpha");
+//const monsterTableAlpha = document.getElementById("monster-table-alpha");
 
 const alpha = {
-	index: "adult-black-dragon"
+	index: "adult-black-dragon",
+	table: document.getElementById("monster-table-alpha")
 }
 
 //when using local storage things break
@@ -11,8 +12,8 @@ const useLocalStorage = false; //used to avoid api rate limit
 //load monsters from local storage
 
 //Monster Imigration policies
-const monsterStart = 99; //what index to start picking from
-const amountMonsters = 15; //how many monsters to fetch
+const monsterStart = 9; //what index to start picking from
+const amountMonsters = 25; //how many monsters to fetch
 const monsterEnd = monsterStart + amountMonsters; //for Arr.slice() 
 
 let monsterCatalog = new Map();
@@ -47,34 +48,6 @@ async function getJson(apiUrl) {
 		return json;
 	}
 }
-
-//function monsterFactory(monsterJson) {
-	////print("monsterFactory", "monsterJson", monsterJson);
-	
-	//const monsterOrder = monsterJson.results.slice(monsterStart, amountMonsters);
-	
-			//monsterOrder.forEach(async monster => {
-			//const monsterData = await getJson(dndApi.url + monster.url)
-			////print("monsterFactory", "monsterData", monsterData);
-
-			//const monsterTitle = document.createElement('h2');
-			//monsterTitle.textContent = monster.name;
-
-			//const monsterImg = document.createElement('img');
-			//const imgPath = dndApi.url + monsterData.image;
-			////print("monsterFactory", "imgPath", imgPath);
-			//monsterImg.src = imgPath; 
-
-			//monsterContainer.append(monsterTitle, monsterImg);
-		//});
-//}
-
-//function buildMonsters() {
-	//getJson(dndApi.monsters())
-		//.then(json => monsterFactory(json))
-		//.then(monsters => monsterContainer.append(monsters));
-
-//}
 
 /**************************************************************
  * returns one table header with objArr's key  titles
@@ -111,8 +84,6 @@ function buildTableRows(monsterObjArr) {
 		
 			data.textContent = m[key];
 			//print("buildTableRows", "m.key", m[key]);
-
-
 
 			dataRow.append(data);
 		});
@@ -263,7 +234,7 @@ function buildMonster(container, monsterIndex) {
 
 function renderPage() {
 	buildMonster(monsterContainerAlpha, alpha.index);
-	buildMonsterTable(monsterTableAlpha);
+	buildMonsterTable(alpha.table);
 }
 
 renderPage();
