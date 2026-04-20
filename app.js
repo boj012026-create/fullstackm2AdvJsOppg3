@@ -2,7 +2,8 @@ const monsterContainer = document.getElementById("monster-container");
 const monsterContainerAlpha = document.getElementById("monster-container-alpha");
 const monsterTableAlpha = document.getElementById("monster-table-alpha");
 
-const useLocalStorage = true; //used to avoid api rate limit
+//when using local storage things break
+const useLocalStorage = false; //used to avoid api rate limit
 //load monsters from local storage
 
 //Monster Imigration policies
@@ -10,7 +11,7 @@ const monsterStart = 99; //what index to start picking from
 const amountMonsters = 15; //how many monsters to fetch
 const monsterEnd = monsterStart + amountMonsters; //for Arr.slice() 
 
-let monsterCatalog = new Map;
+let monsterCatalog = new Map();
 
 /*************************************************************
  * api doesn't support limit or offset querry parmameters.
@@ -169,7 +170,8 @@ async function catchMonsters() {
 
 function monsterStored(monster) {
 	print("monsterStored", "monster", monster);
-	return monsterCatalog.has(monster.index);	
+	print("monsterStored", "monsterCatalog", monsterCatalog);
+	return  monsterCatalog.has(monster.index);	
 }
 
 function loadLocalMonsters() {
