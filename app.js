@@ -221,17 +221,21 @@ function buildMonsterTable(table) {
 		.then(cleanMonsters => tableFactory(cleanMonsters))
 		.then(monsterRows => table.replaceChildren(...monsterRows)); 
 }
-
-function buildMonster(container, monsterIndex) {
+/**
+ * builds a monster based on blueprint
+ * which also contain dom-element references
+ * @bp bluePrint
+ */
+function buildMonster(pb) {
 	const monsterImg = document.createElement('img')
 	//const imgpath = dndApi.url + "/images/monsters/" + 
-	const imgPath = `${dndApi.url}/api/images/monsters/${monsterIndex}.png`; 
+	const imgPath = `${dndApi.url}/api/images/monsters/${pb.index}.png`; 
 	monsterImg.src = imgPath;
-	container.replaceChildren(monsterImg);
+	pb.monsterContainer.replaceChildren(monsterImg);
 }
 
 function renderPage() {
-	buildMonster(alpha.monsterContainer, alpha.index);
+	buildMonster(alpha);
 	buildMonsterTable(alpha.table);
 }
 
