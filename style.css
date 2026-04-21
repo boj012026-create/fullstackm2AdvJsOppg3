@@ -1,4 +1,5 @@
 body {
+	color: wheat;
 	background: radial-gradient(#22f, #111);
 }
 
@@ -9,13 +10,25 @@ main {
 
 .monster-container {
 	/*height: 100vh;*/
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 1em;
+	gap: 1em;
 
 	img {
 		height: 50vh;
 		border-radius: 1em;
 		border-image: 1em;
 	
-		border: 4px solid #1111;
+		border: 1em ridge #1117;
 		box-shadow: 0 0 1em gold;
+	}
+
+	table {
+		background-color: #6417;
+		border-radius: 1em;
+		box-shadow: 0 0 1em black;
+		padding: 2em;
 	}
 }
