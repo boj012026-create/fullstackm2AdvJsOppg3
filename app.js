@@ -77,7 +77,7 @@ function buildTableTitles(monsterObjArr) {
  * builds table rows from given monster Object array
  * returns an array of tableRows
  * ***********************************************************/
-function buildTableRows(monsterObjArr) {
+function buildTableRows(monsterObjArr, bp) {
 	return monsterObjArr.map(m => {
 		const dataRow = document.createElement('tr');
 		//print("buildTableRows", "m", m) 
@@ -95,7 +95,7 @@ function buildTableRows(monsterObjArr) {
 		const rowBtn = document.createElement('button');
 		rowBtn.textContent = "Show";
 		rowBtn.addEventListener('click', () => {
-			alpha.index = m.name;
+			bp.index = m.name;
 			renderPage();
 		});
 
@@ -109,11 +109,11 @@ function buildTableRows(monsterObjArr) {
 /************************************************************
  * returns an array of tableRows
  * **********************************************************/
-function tableFactory(monsters) {
+function tableFactory(monsters, bp) {
 	print("tableFactory", "monsters", monsters);
 	const tableRows = [];
 	tableRows.push(buildTableTitles(monsters));
-	tableRows.push(...buildTableRows(monsters));
+	tableRows.push(...buildTableRows(monsters, bp));
 	
 	//print("tableFactory", "tableRows", tableRows);
 	return tableRows;
@@ -226,7 +226,7 @@ function washdroid(target) {
 function buildMonsterTable(bp) {
 	catchMonsters()
 		.then(wildMonsters => monsterWasher(wildMonsters))
-		.then(cleanMonsters => tableFactory(cleanMonsters))
+		.then(cleanMonsters => tableFactory(cleanMonsters, bp))
 		.then(monsterRows => bp.table.replaceChildren(...monsterRows)); 
 }
 /**
@@ -245,6 +245,8 @@ function buildMonster(pb) {
 function renderPage() {
 	buildMonster(alpha);
 	buildMonsterTable(alpha);
+	buildMonster(beta);
+	buildMonsterTable(beta);
 }
 
 renderPage();
