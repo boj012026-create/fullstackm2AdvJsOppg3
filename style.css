@@ -18,7 +18,7 @@ main {
 
 	img {
 		height: 50vh;
-		border-radius: 1em;
+		border-radius: 2em;
 		border-image: 1em;
 	
 		border: 1em ridge #1117;
