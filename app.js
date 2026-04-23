@@ -10,6 +10,9 @@ const beta = {
 	monsterContainer: document.getElementById("monster-container-beta")
 }
 
+//cache for json fetching
+let cache = new Map();
+
 //when using local storage things break
 const useLocalStorage = false; //used to avoid api rate limit
 //load monsters from local storage
@@ -41,6 +44,10 @@ function print(funcName, objName, obj) {
 }
 
 async function getJson(apiUrl) {
+	if(cache.has(apiUrl)) {
+		return cache.get(apiUrl);
+	}
+
 	const response = await fetch(apiUrl);
 	//print("getJson", "response", response)
 	
@@ -48,6 +55,7 @@ async function getJson(apiUrl) {
 		const json = await response.json()
 		//print("getJson", "json", json);
 
+		cache.set(apiUrl, json); 
 		return json;
 	}
 }
