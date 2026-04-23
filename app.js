@@ -22,8 +22,6 @@ const monsterStart = 9; //what index to start picking from
 const amountMonsters = 25; //how many monsters to fetch
 const monsterEnd = monsterStart + amountMonsters; //for Arr.slice() 
 
-let monsterCatalog = new Map();
-
 /*************************************************************
  * api doesn't support limit or offset querry parmameters.
  * But does have a rate limit.
@@ -44,7 +42,8 @@ function print(funcName, objName, obj) {
 }
 
 async function getJson(apiUrl) {
-	if(cache.has(apiUrl)) {
+	if(cache.has(apiUrl)) {//get json from cache if exist 
+		console.log("something was imported from cache");
 		return cache.get(apiUrl);
 	}
 
@@ -138,28 +137,14 @@ async function catchMonsters() {
 
 	let choosenTrackers = monsterTrackers.results.slice(monsterStart, monsterEnd)
 
-	if(useLocalStorage) {
-		loadLocalMonsters();
-		//choosenTrackers = monsterTrackers.results;//gets all monsters
-	}
-
 	//Promise runs independent awaits concurrently, but overloaded api
 	const wildMonsters = await Promise.all( choosenTrackers.map(async (mi) => {
 		//print("catchMonsters", "mi", mi);
 
-		if(monsterStored(mi)) {
-			const oldMonster = monsterCatalog.get(mi.index)
-			//print("catchMonsters", "oldMonster",oldMonster);
-
-			return monsterCatalog.get(mi.index);
-		} else {
 			const newMonster = await getJson(dndApi.url + mi.url);
 			//print("catchMonsters", "newMosnter",newMonster);
 
-			//saves new monster
-			storeMonster(newMonster);
 			return newMonster;
-		}
 	}));
 
 
@@ -167,28 +152,15 @@ async function catchMonsters() {
 	return wildMonsters;
 }
 
-function monsterStored(monster) {
-	//print("monsterStored", "monster", monster);
-	//print("monsterStored", "monsterCatalog", monsterCatalog);
-	return  monsterCatalog.has(monster.index);	
-}
-
 function loadLocalMonsters() {
-	if(useLocalStorage) {
-		const json = localStorage.getItem("monsterCatalog");
-		if (json) {
-			monsterCatalog = JSON.parse(json);
-		}
-	} else {
-		localStorage.clear();
-	}
-}
-
-function storeMonster(monster) {
-	monsterCatalog.set(monster.index, monster);
-	if(useLocalStorage) {
-	localStorage.setItem("monsterCatalog",JSON.stringify(monsterCatalog)); 
-	}
+	//if(useLocalStorage) {
+		//const json = localStorage.getItem("monsterCatalog");
+		//if (json) {
+			//monsterCatalog = JSON.parse(json);
+		//}
+	//} else {
+		//localStorage.clear();
+	//}
 }
 
 /***********************************************************
@@ -257,3 +229,4 @@ function renderPage() {
 }
 
 renderPage();
+
