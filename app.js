@@ -10,8 +10,6 @@ const beta = {
 	monsterContainer: document.getElementById("monster-container-beta")
 }
 
-//cache for json fetching
-let cache = new Map();
 
 //when using local storage things break
 const useLocalStorage = false; //used to avoid api rate limit
@@ -41,22 +39,53 @@ function print(funcName, objName, obj) {
 	console.log(`${funcName}()/${objName}:\n`, obj);
 }
 
+
+//Getjson() common static stuff
+let cache = new Map();
+
+const request = {
+	count: 0,
+	limit: 100,//amount of requests allowed within a timeframe
+	lastReset: 0, //to calculate time before reset
+	countResetTime: 60000,//ms. Time before request limit resets
+	full: false,
+	queue: async function() {
+		if(this.full) {
+			await openGate()
+		} 
+		//if we are past reset time
+		else if (this.countResetTime < Date.now() - this.lastReset) {
+			this.lastReset = Date.now();
+			this.count = 0;
+			this.full = false;
+		}
+		//if request.limit is violated
+		else if (this.limit < this.count) {
+			this.full = true;
+			//something that triggers openGate();
+		}
+	}
+}
+
 async function getJson(apiUrl) {
 	if(cache.has(apiUrl)) {//get json from cache if exist 
 		console.log("something was imported from cache");
 		return cache.get(apiUrl);
 	}
 
+	//limit request within api limits
+	
 	const response = await fetch(apiUrl);
 	//print("getJson", "response", response)
 	
-	if (response.ok) {
-		const json = await response.json()
-		//print("getJson", "json", json);
+	if (!response.ok) {
 
-		cache.set(apiUrl, json); 
-		return json;
 	}
+	const json = await response.json()
+	//print("getJson", "json", json);
+
+	cache.set(apiUrl, json);//stores json to cache 
+	return json;
 }
 
 /**************************************************************
