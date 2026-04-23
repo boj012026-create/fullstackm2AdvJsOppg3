@@ -16,8 +16,8 @@ const useLocalStorage = false; //used to avoid api rate limit
 //load monsters from local storage
 
 //Monster Imigration policies
-const monsterStart = 9; //what index to start picking from
-const amountMonsters = 25; //how many monsters to fetch
+const monsterStart = 0; //what index to start picking from
+const amountMonsters = 40; //how many monsters to fetch
 const monsterEnd = monsterStart + amountMonsters; //for Arr.slice() 
 
 /*************************************************************
@@ -45,16 +45,16 @@ let cache = new Map();
 
 const request = {
 	count: 0,
-	limit: 100,//amount of requests allowed within a timeframe
-	lastReset: 0, //to calculate time before reset
+	limit: 99,//amount of requests allowed within a timeframe
+	lastReset: Date.now(), //to calculate time before reset
 	countResetTime: 60000,//ms. Time before request limit resets
-	full: false,
+	full: false, 
 	queue: async function() {
 		if(this.full) {
-			await openGate()
+			await this.openGate();
 		} 
 		//if we are past reset time
-		else if (this.countResetTime < Date.now() - this.lastReset) {
+		else if (this.timeToReset() <= 0) {
 			this.lastReset = Date.now();
 			this.count = 0;
 			this.full = false;
@@ -62,18 +62,29 @@ const request = {
 		//if request.limit is violated
 		else if (this.limit < this.count) {
 			this.full = true;
-			//something that triggers openGate();
+			await this.openGate();
+			this.count = 0;
+			this.full = false;
 		}
+		print("request", "count", this.count);
+		++this.count;
+	},
+	openGate: async function() {
+		let ms = this.timeToReset();
+		return new Promise(resolve => setTimeout(resolve, ms)); 
+	},
+	timeToReset: function() {
+		return this.countResetTime - (Date.now() - this.lastReset);
 	}
 }
 
 async function getJson(apiUrl) {
 	if(cache.has(apiUrl)) {//get json from cache if exist 
-		console.log("something was imported from cache");
 		return cache.get(apiUrl);
-	}
+	} 
 
 	//limit request within api limits
+	await request.queue();
 	
 	const response = await fetch(apiUrl);
 	//print("getJson", "response", response)
@@ -172,7 +183,6 @@ async function catchMonsters() {
 
 			const newMonster = await getJson(dndApi.url + mi.url);
 			//print("catchMonsters", "newMosnter",newMonster);
-
 			return newMonster;
 	}));
 
@@ -181,15 +191,28 @@ async function catchMonsters() {
 	return wildMonsters;
 }
 
-function loadLocalMonsters() {
-	//if(useLocalStorage) {
-		//const json = localStorage.getItem("monsterCatalog");
-		//if (json) {
-			//monsterCatalog = JSON.parse(json);
-		//}
-	//} else {
-		//localStorage.clear();
-	//}
+function storeLocal() {
+	if(useLocalStorage) {
+		const cacheArray = Array.from(cache, ([key, value]) => ({
+			id: key,
+			...value
+		}));
+		localStorage.setItem("cacheArray", JSON.stringify(cacheArray));
+		console.log("saved", cacheArray);
+	}
+}
+
+function loadLocal() {
+	if(useLocalStorage) {
+		const json = localStorage.getItem("cacheArray");
+		if (json) {
+			let cacheArray = JSON.parse(json);
+			cache = new Map(cacheArray.map(c => [c.id, c]));
+			console.log("loaded", cacheArray);
+		}
+	} else {
+		localStorage.clear();
+	}
 }
 
 /***********************************************************
@@ -255,7 +278,7 @@ function renderPage() {
 	buildMonsterTable(alpha);
 	buildMonster(beta);
 	buildMonsterTable(beta);
+	storeLocal();
 }
-
+loadLocal();
 renderPage();
-
