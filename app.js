@@ -1,4 +1,3 @@
-
 const alpha = {
 	index: "adult-black-dragon",
 	table: document.getElementById("monster-table-alpha"),
@@ -57,11 +56,11 @@ async function getJson(apiUrl) {
  * returns one table header with objArr's key  titles
  * ************************************************************/
 function buildTableTitles(monsterObjArr) {
-	print("buildTableTitles", "monsterObjArr", monsterObjArr);
+	//print("buildTableTitles", "monsterObjArr", monsterObjArr);
 	const tableHeader = document.createElement('tr');
 	
 	const monsterKeys = Object.keys(monsterObjArr[0]);
-	print("buildTableTitles", "monsterKeys", monsterKeys);
+	//print("buildTableTitles", "monsterKeys", monsterKeys);
 
 	monsterKeys.forEach(key => {
 		const title = document.createElement('th');
@@ -110,7 +109,7 @@ function buildTableRows(monsterObjArr, bp) {
  * returns an array of tableRows
  * **********************************************************/
 function tableFactory(monsters, bp) {
-	print("tableFactory", "monsters", monsters);
+	//print("tableFactory", "monsters", monsters);
 	const tableRows = [];
 	tableRows.push(buildTableTitles(monsters));
 	tableRows.push(...buildTableRows(monsters, bp));
@@ -124,7 +123,7 @@ function tableFactory(monsters, bp) {
  * amount of monsters are controlled by constants in top
  * ***********************************************************/
 async function catchMonsters() {
-	print("fetchMonsters", "monsterCatalog", monsterCatalog); 
+	//print("fetchMonsters", "monsterCatalog", monsterCatalog); 
 
 	const monsterTrackers = await getJson(dndApi.monsters());
 	//print("fetchMonsters", "monsterTrackers", monsterTrackers); 
@@ -156,13 +155,13 @@ async function catchMonsters() {
 	}));
 
 
-	print("catchMonsters", "wildMonsters", wildMonsters);
+	//print("catchMonsters", "wildMonsters", wildMonsters);
 	return wildMonsters;
 }
 
 function monsterStored(monster) {
-	print("monsterStored", "monster", monster);
-	print("monsterStored", "monsterCatalog", monsterCatalog);
+	//print("monsterStored", "monster", monster);
+	//print("monsterStored", "monsterCatalog", monsterCatalog);
 	return  monsterCatalog.has(monster.index);	
 }
 
@@ -188,11 +187,11 @@ function storeMonster(monster) {
  * extracts wanted monster values into a flat object array
  * ********************************************************/
 function monsterWasher(dirtyMonsters) {
-	print("monsterWasher", "dirtyMonsters", dirtyMonsters);	
-	print("monsterWasher", "dirtyMonsters.length", dirtyMonsters.length);	
+	//print("monsterWasher", "dirtyMonsters", dirtyMonsters);	
+	//print("monsterWasher", "dirtyMonsters.length", dirtyMonsters.length);	
 
 	const cleanMonsters = dirtyMonsters.map(dirty => {
-		print("monsterWasher", "dirty", dirty);	
+		//print("monsterWasher", "dirty", dirty);	
 		const clean = {};
 		clean.name = washdroid(dirty.index);
 		clean.size = washdroid(dirty.size);
@@ -202,7 +201,7 @@ function monsterWasher(dirtyMonsters) {
 		return clean;
 	});
 
-	print("monsterWasher","cleanMonsters", cleanMonsters);
+	//print("monsterWasher","cleanMonsters", cleanMonsters);
 	return cleanMonsters;
 }
 
