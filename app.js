@@ -13,7 +13,6 @@ const beta = {
 
 //when using local storage things break
 const useLocalStorage = false; //used to avoid api rate limit
-//load monsters from local storage
 
 //Monster Imigration policies
 const monsterStart = 0; //what index to start picking from
